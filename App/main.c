@@ -1,5 +1,5 @@
 #include <windows.h>
-// 1. Incluimos la librería para el manejo del diseño del sistema
+// 1. Incluimos la librerÃ­a para el manejo del diseÃ±o del sistema
 #include <dwmapi.h>
 
 // Ventana principal
@@ -19,18 +19,18 @@
 WNDPROC ProcedimientoOriginalBoton;
 HWND botonHovered = NULL;
 
-// El "Espía" (Subclass Procedure) para los botones
+// El "EspÃ­a" (Subclass Procedure) para los botones
 LRESULT CALLBACK BotonHoverProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
 	switch(msg) {
 		case WM_MOUSEMOVE: {
-			// Si el mouse acaba de entrar a este botón
+			// Si el mouse acaba de entrar a este botÃ³n
 			if (botonHovered != hwnd) {
 				botonHovered = hwnd;
 				
-				// Forzamos al botón a que se vuelva a dibujar inmediatamente
+				// Forzamos al botÃ³n a que se vuelva a dibujar inmediatamente
 				InvalidateRect(hwnd, NULL, FALSE); 
 
-				// Le pedimos a Windows que nos avise cuando el mouse SALGA del botón
+				// Le pedimos a Windows que nos avise cuando el mouse SALGA del botÃ³n
 				TRACKMOUSEEVENT tme;
 				tme.cbSize = sizeof(TRACKMOUSEEVENT);
 				tme.dwFlags = TME_LEAVE;
@@ -40,15 +40,15 @@ LRESULT CALLBACK BotonHoverProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lPara
 			break;
 		}
 		case WM_MOUSELEAVE: {
-			// El mouse salió del botón
+			// El mouse saliÃ³ del botÃ³n
 			botonHovered = NULL;
 			
-			// Forzamos al botón a que se dibuje de nuevo (para quitar el color claro)
+			// Forzamos al botÃ³n a que se dibuje de nuevo (para quitar el color claro)
 			InvalidateRect(hwnd, NULL, FALSE); 
 			break;
 		}
 	}
-	// Dejamos que el botón haga el resto de sus cosas normales (como detectar clics)
+	// Dejamos que el botÃ³n haga el resto de sus cosas normales (como detectar clics)
 	return CallWindowProc(ProcedimientoOriginalBoton, hwnd, msg, wParam, lParam);
 }
 
@@ -60,7 +60,7 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT Message, WPARAM wParam, LPARAM lParam) 
 	switch(Message) {
 		/* WM_CREATE se ejecuta una sola vez al nacer la ventana */
 		case WM_CREATE: {
-			// 1. Creamos la pantalla (la hacemos más alta para igualar a Windows)
+			// 1. Creamos la pantalla (la hacemos mÃ¡s alta para igualar a Windows)
 			HWND hwndPantalla = CreateWindowEx(0, "EDIT", "1.234.567.890", 
 				WS_CHILD | WS_VISIBLE |  WS_CHILDWINDOW | ES_RIGHT | ES_READONLY,
 				0, 73, 320, 77, /* x, y, ancho, alto */
@@ -77,33 +77,33 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT Message, WPARAM wParam, LPARAM lParam) 
 			// Usamos 24 elementos (6 filas x 4 columnas)
 			// LPCWSTR significa "Puntero a texto Unicode constante"
 			LPCWSTR botones[24] = {
-				L"%", L"CE", L"C", L"\x232B",    // \x232B es el símbolo ? (Borrar)
-				L"1/x", L"x\x00B2", L"\x221Ax", L"\x00F7", // x², vx, ÷
-				L"7", L"8", L"9", L"\x00D7",     // \x00D7 es el símbolo ×
+				L"%", L"CE", L"C", L"\x232B",    // \x232B es el sÃ­mbolo ? (Borrar)
+				L"1/x", L"x\x00B2", L"\x221Ax", L"\x00F7", // xÂ², vx, Ã·
+				L"7", L"8", L"9", L"\x00D7",     // \x00D7 es el sÃ­mbolo Ã—
 				L"4", L"5", L"6", L"-",
 				L"1", L"2", L"3", L"+",
 				L"+/-", L"0", L",", L"="
 			};
 
-			// 3. Variables para la matemática de la cuadrícula
+			// 3. Variables para la matemÃ¡tica de la cuadrÃ­cula
 			int margenX = 4;      // Espacio desde el borde izquierdo
 			int margenY = 185;     // Espacio desde el borde superior (dejamos espacio para la pantalla)
-			int anchoBtn = 77;     // Ancho de cada botón
-			int altoBtn = 54;      // Alto de cada botón
-			int espacio = 2;       // Separación entre botones
+			int anchoBtn = 77;     // Ancho de cada botÃ³n
+			int altoBtn = 54;      // Alto de cada botÃ³n
+			int espacio = 2;       // SeparaciÃ³n entre botones
 
-			// Fuente normal para los números
+			// Fuente normal para los nÃºmeros
 			HFONT fuenteBotones = CreateFontW(20, 0, 0, 0, FW_NORMAL, FALSE, FALSE, FALSE, 
 								  DEFAULT_CHARSET, OUT_OUTLINE_PRECIS, CLIP_DEFAULT_PRECIS, 
 								  CLEARTYPE_QUALITY, VARIABLE_PITCH, L"Segoe UI");
 
-			// NUEVA: Fuente de símbolos de interfaz de Windows
-			// Tamaño 22 se ajusta perfectamente a un botón de 54px de alto
+			// NUEVA: Fuente de sÃ­mbolos de interfaz de Windows
+			// TamaÃ±o 22 se ajusta perfectamente a un botÃ³n de 54px de alto
 			HFONT fuenteMath = CreateFontW(22, 0, 0, 0, FW_NORMAL, FALSE, FALSE, FALSE, 
 								  DEFAULT_CHARSET, OUT_OUTLINE_PRECIS, CLIP_DEFAULT_PRECIS, 
 								  CLEARTYPE_QUALITY, VARIABLE_PITCH, L"Segoe UI Symbol");
 
-			// 4. El bucle mágico que crea los 24 botones automáticamente
+			// 4. El bucle mÃ¡gico que crea los 24 botones automÃ¡ticamente
 			int i;
 			for ( i = 0; i < 24; i++) {
 				// Calculamos la fila y columna actual
@@ -118,23 +118,23 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT Message, WPARAM wParam, LPARAM lParam) 
 				// Cambiamos a BS_OWNERDRAW para pintarlos nosotros
 				DWORD estilo = WS_CHILD | WS_VISIBLE | BS_OWNERDRAW;
 				
-				// Creamos el botón
+				// Creamos el botÃ³n
 				HWND btn = CreateWindowExW(0, L"BUTTON", botones[i], estilo,
 					x, y, anchoBtn, altoBtn,
 					hwnd, (HMENU)(INT_PTR)(ID_BOTON_BASE + i), NULL, NULL);
 
-				// --- MODIFICACIÓN: Aplicamos la fuente según el tipo de botón ---
+				// --- MODIFICACIÃ“N: Aplicamos la fuente segÃºn el tipo de botÃ³n ---
 				// Usamos la misma regla de tus colores: Botones especiales o columna derecha
 				if (i < 8 || i % 4 == 3) {
 					// A los operadores les ponemos Cambria Math
 					SendMessage(btn, WM_SETFONT, (WPARAM)fuenteMath, TRUE);
 				} else {
-					// A los números les ponemos Segoe UI
+					// A los nÃºmeros les ponemos Segoe UI
 					SendMessage(btn, WM_SETFONT, (WPARAM)fuenteBotones, TRUE);
 				}
 				// ----------------------------------------------------------------
 
-				// Inyectamos nuestro espía al botón (tu código de hover)
+				// Inyectamos nuestro espÃ­a al botÃ³n (tu cÃ³digo de hover)
 				ProcedimientoOriginalBoton = (WNDPROC)SetWindowLongPtr(btn, GWLP_WNDPROC, (LONG_PTR)BotonHoverProc);
 			}
 			break;
@@ -149,7 +149,7 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT Message, WPARAM wParam, LPARAM lParam) 
 				SetTextColor(hdc, RGB(255, 255, 255)); // Texto de color blanco
 				SetBkColor(hdc, RGB(32, 32, 32));      // Fondo del texto gris oscuro
 				
-				// Creamos una brocha gris oscura para el fondo del rectángulo
+				// Creamos una brocha gris oscura para el fondo del rectÃ¡ngulo
 				static HBRUSH brochaFondo = NULL;
 				if (!brochaFondo) brochaFondo = CreateSolidBrush(RGB(32, 32, 32));
 				
@@ -162,20 +162,20 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT Message, WPARAM wParam, LPARAM lParam) 
 		case WM_DRAWITEM: {
 			LPDRAWITEMSTRUCT pdis = (LPDRAWITEMSTRUCT)lParam;
 			
-			// Nos aseguramos de que lo que estamos pintando es un botón
+			// Nos aseguramos de que lo que estamos pintando es un botÃ³n
 			if (pdis->CtlType == ODT_BUTTON) {
 				int idBoton = pdis->CtlID - ID_BOTON_BASE; // Del 0 al 23
 				
 				// 1. Elegir colores (como en Windows 10/11)
-				COLORREF colorFondo = COL_BTN_NUMS;   // Gris estándar para números
+				COLORREF colorFondo = COL_BTN_NUMS;   // Gris estÃ¡ndar para nÃºmeros
 				COLORREF colorTexto = RGB(255, 255, 255); // Blanco
 				
-				// Si es un botón de operación (arriba a la derecha), lo hacemos un poco más oscuro
+				// Si es un botÃ³n de operaciÃ³n (arriba a la derecha), lo hacemos un poco mÃ¡s oscuro
 				if (idBoton < 8 || idBoton % 4 == 3) {
 					colorFondo = COL_BTN_OPER; 
 				}
 				
-				// Si es el botón "=" (el último), lo pintamos azul
+				// Si es el botÃ³n "=" (el Ãºltimo), lo pintamos azul
 				if (idBoton == 23) {
 					colorFondo = COL_EQUAL_BTN; // Azul estilo Windows
 					colorTexto = RGB(0, 0, 0); // Negro
@@ -189,7 +189,7 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT Message, WPARAM wParam, LPARAM lParam) 
 						colorFondo = RGB(80, 80, 80);
 					}	 
 				} 
-				// Si no está haciendo clic, pero el mouse está encima (Hover)
+				// Si no estÃ¡ haciendo clic, pero el mouse estÃ¡ encima (Hover)
 				else if(pdis->hwndItem == botonHovered) {
 				    if (idBoton == 23) {
 				        colorFondo = RGB(25, 115, 255);
@@ -203,7 +203,7 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT Message, WPARAM wParam, LPARAM lParam) 
 				    }
 				}
 
-				// 2. Pintar el fondo del botón
+				// 2. Pintar el fondo del botÃ³n
 				HBRUSH brocha = CreateSolidBrush(colorFondo);
 				FillRect(pdis->hDC, &pdis->rcItem, brocha);
 				DeleteObject(brocha);
@@ -212,8 +212,8 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT Message, WPARAM wParam, LPARAM lParam) 
 				SetTextColor(pdis->hDC, colorTexto);
 				SetBkMode(pdis->hDC, TRANSPARENT); // Fondo del texto transparente
 				
-				// --- EL TRUCO PARA LOS SÍMBOLOS ---
-				// 1. Le pedimos al botón la fuente que le asignamos en el WM_CREATE
+				// --- EL TRUCO PARA LOS SÃMBOLOS ---
+				// 1. Le pedimos al botÃ³n la fuente que le asignamos en el WM_CREATE
 				HFONT fuenteDelBoton = (HFONT)SendMessage(pdis->hwndItem, WM_GETFONT, 0, 0);
 				
 				// 2. Se la asignamos temporalmente a nuestro pincel (hDC)
@@ -221,7 +221,7 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT Message, WPARAM wParam, LPARAM lParam) 
 				HFONT fuenteVieja = (HFONT)SelectObject(pdis->hDC, fuenteDelBoton);
 				// ----------------------------------
 				
-				// Obtenemos el texto del botón y lo dibujamos centrado
+				// Obtenemos el texto del botÃ³n y lo dibujamos centrado
 				wchar_t textoBoton[10];
 				GetWindowTextW(pdis->hwndItem, textoBoton, 10);
 				DrawTextW(pdis->hDC, textoBoton, -1, &pdis->rcItem, DT_CENTER | DT_VCENTER | DT_SINGLELINE);
@@ -229,13 +229,13 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT Message, WPARAM wParam, LPARAM lParam) 
 				// 3. Restauramos el pincel a su estado original al terminar
 				SelectObject(pdis->hDC, fuenteVieja);
 				
-				return TRUE; // Le decimos a Windows: "Ya lo pinté yo"
+				return TRUE; // Le decimos a Windows: "Ya lo pintÃ© yo"
 			}
 			break;
 		}
 		/* Upon destruction, tell the main thread to stop */
 		case WM_DESTROY: {
-			// Es una buena práctica de programación liberar la memoria de la fuente al cerrar
+			// Es una buena prÃ¡ctica de programaciÃ³n liberar la memoria de la fuente al cerrar
 			DeleteObject(fuenteGrande); 
 			PostQuitMessage(0);
 			break;
@@ -283,14 +283,14 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 		return 0;
 	}
 	
-	// --- CONFIGURACIÓN PARA WINDOWS 10 (Modo Oscuro Inteligente) ---
+	// --- CONFIGURACIÃ“N PARA WINDOWS 10 (Modo Oscuro Inteligente) ---
 	BOOL usarModoOscuro = TRUE;
 	
 	// Intentamos aplicar el modo oscuro con el atributo 20 (Win10 nuevos/Win11)
-	// HRESULT es un tipo de dato que guarda si la operación fue un éxito o falló
+	// HRESULT es un tipo de dato que guarda si la operaciÃ³n fue un Ã©xito o fallÃ³
 	HRESULT resultado = DwmSetWindowAttribute(hwnd, 20, &usarModoOscuro, sizeof(usarModoOscuro));
 	
-	// Si falló (FAILED), significa que tienes un Windows 10 más antiguo, así que probamos el 19
+	// Si fallÃ³ (FAILED), significa que tienes un Windows 10 mÃ¡s antiguo, asÃ­ que probamos el 19
 	if (FAILED(resultado)) {
 		DwmSetWindowAttribute(hwnd, 19, &usarModoOscuro, sizeof(usarModoOscuro));
 	}
